@@ -1,0 +1,251 @@
+<html>
+    <head>
+        
+        <title>JQuery</title>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+        
+        <link href="jquery-ui/jquery-ui.css" rel="stylesheet">
+        
+        <script src="jquery-ui/jquery-ui.js"></script>
+        
+        <style type="text/css">
+            
+            body {
+                
+                margin:0 auto;
+                padding:0;
+                
+            }
+            
+            #header {
+                
+                padding:10px;
+                background-color:#e5e5e5;
+                height:40px;
+                font-size:0%;
+                
+            }
+            
+            #title {
+                
+                font-weight:bold;
+                padding-top:5px;
+                font-size: 25px !important;
+                float:left;
+                margin-top:0px;
+                width:20%;
+                
+            }
+            
+            #buttons {
+                
+                width:60%;
+                float:left;
+                text-align: center;                
+            }
+            
+            #author {
+                
+                margin-top:-5px;
+                float:left;
+                text-align:right;
+                font-size:14px;
+                width:20%;
+                
+            }
+
+            h2 {
+                
+                margin-top:0;
+                padding:10px;
+                font-size:15px !important;
+                display: inline-block;
+                font-weight: 200;
+                border-top:1px solid grey;
+                border-bottom: 1px solid grey;
+                border-left: 1px solid grey;
+                -webkit-touch-callout: none; /* iOS Safari */
+                -webkit-user-select: none; /* Safari */
+                -khtml-user-select: none; /* Konqueror HTML */
+                -moz-user-select: none; /* Firefox */
+                -ms-user-select: none; /* Internet Explorer/Edge */
+                user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+
+                
+            }
+            
+            #html {
+                
+                border-top-left-radius: 5px;
+                border-bottom-left-radius: 5px;
+                background-color: aliceblue;
+                
+            }
+            
+            #output {
+                
+                border: 1px solid grey;
+                border-top-right-radius: 5px;
+                border-bottom-right-radius: 5px;
+                background-color: aliceblue;
+                
+            }
+            
+            .button:hover {
+                
+                cursor: pointer;
+                
+            }
+            
+            .codeBox{
+                
+                border:1px solid grey;
+                width:49.9%;
+                height:100%;
+                float:left;
+        
+            }
+            
+            #cssCode{
+                
+                display:none;
+                
+            }
+            
+            #javascriptCode{
+                
+                display:none;
+                
+            }
+            
+                        
+        </style>
+        
+    </head>
+    
+    <body>
+        
+        <div id="header">
+            <h1 id="title">Code Player</h1>
+            <div id="buttons">
+                <h2 id="html" class="button">HTML</h2>
+                <h2 id="css" class="button">CSS</h2>
+                <h2 id="javascript" class="button">JavaScript</h2>
+                <h2 id="output" class="button">Output</h2>
+            </div>
+            <div id="author">
+                <h3>Created by Anthony Mansur</h3>
+            </div>
+        </div>
+        <div id="code">
+            <textarea type="text" id="htmlCode" class="codeBox"><p id="text">Hi there!</p></textarea>
+            <textarea id="cssCode" class="codeBox">p { &#13;&#10;font-size:200%; &#13;&#10;color:red; &#13;&#10;} </textarea>
+            <textarea id="javascriptCode" class="codeBox">document.getElementById("text").style.marginTop = "0"</textarea>
+            <div id="outputCode" class="codeBox">output</div>
+        </div>
+        
+        <script type="text/javascript">
+            
+            $(window).load(function () {
+                updateOutput();
+            });
+            //source: stackoverflow
+            
+            var count = 2;
+            
+            $(".button").click(function() {
+                if($(this).css("backgroundColor") === "rgba(0, 0, 0, 0)") {
+                    $(this).css("backgroundColor", "aliceBlue");
+                    count++;
+                    update(count);
+                    display($(this).attr('id'));
+                } else {
+                    $(this).css("backgroundColor", "rgba(0, 0, 0, 0)");
+                    count--;
+                    update(count);
+                    display($(this).attr('id'));
+                }
+                
+            })
+            
+            $("textarea").keyup(function() {
+                updateOutput();
+            })
+            
+           function update(count) {
+                switch(count) {
+
+                    case 0:
+                        $(".codeBox").css("width", "0");
+                        $(".codeBox").css("border", "none")
+                        break;
+                    case 1:
+                        $(".codeBox").css("width", "100%");
+                        $(".codeBox").css("border", "1px solid grey")
+                        break;
+                    case 2:
+                        $(".codeBox").css("width", "49.9%")
+                        break;
+                    case 3:
+                        $(".codeBox").css("width", "33.2%")
+                        break; 
+                    case 4:
+                        $(".codeBox").css("width", "24.9%")
+                        break;
+
+                }
+            }
+            
+            function display(button) {
+                var id = "#" + button;
+                var object = id + "Code";             
+                if($(id).css("backgroundColor") === "rgba(0, 0, 0, 0)"){
+                    $(object).css("display","none");
+                } else {
+                    $(object).css("display","block");;
+                }
+            }
+            
+            function updateOutput(){
+                var code = "";
+                
+                code = "<style type=\"text\/css\">"
+                + $("#cssCode").val()
+                + "<\/style>"
+                + "<body>"
+                + $("#htmlCode").val()
+                + "<script type=\"text\/javascript\">"
+                + $("#javascriptCode").val()
+                + "<\/script>"
+                + "<\/body>";
+                                
+                $("#outputCode").html(code);
+            }
+            
+            $(document).delegate('textarea', 'keydown', function(e) {
+                var keyCode = e.keyCode || e.which;
+
+                if (keyCode == 9) {
+                e.preventDefault();
+                var start = this.selectionStart;
+                var end = this.selectionEnd;
+
+                // set textarea value to: text before caret + tab + text after caret
+                $(this).val($(this).val().substring(0, start)
+                            + "\t"
+                            + $(this).val().substring(end));
+
+                // put caret at right position again
+                this.selectionStart =
+                this.selectionEnd = start + 1;
+                }
+            });
+            //source: stackoverflow
+
+        </script>
+        
+    </body>
+    
+</html>
